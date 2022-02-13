@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.telamon</groupId>
+    <version>0.0.1</version>
+    <artifactId>machamp-parent</artifactId>
+    <packaging>pom</packaging>
+    <name>machamp-parent</name>
+
+    <description>machamp - async task processing engine</description>
+
+    <properties>
+        <modular-name>parent</modular-name>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <kotlin.version>1.6.10</kotlin.version>
+        <kotlin-coroutines.version>1.6.0</kotlin-coroutines.version>
+        <testcontainers.version>1.16.2</testcontainers.version>
+        <postgresql.version>42.3.2</postgresql.version>
+        <springboot.version>2.6.3</springboot.version>
+        <jackson.version>2.13.1</jackson.version>
+        <junit-jupiter.version>5.7.0</junit-jupiter.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>ru.telamon.machamp.${modular-name}</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+    </profiles>
+
+    <dependencies>
+    </dependencies>
+
+</project>

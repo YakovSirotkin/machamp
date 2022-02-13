@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.telamon</groupId>
+    <artifactId>machamp</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <parent>
+        <groupId>ru.telamon</groupId>
+        <artifactId>machamp-parent</artifactId>
+        <version>0.0.1</version>
+        <relativePath>./machamp-parent</relativePath>
+    </parent>
+
+    <name>machamp</name>
+
+    <modules>
+        <module>machamp-parent</module>
+        <module>machamp-core</module>
+    </modules>
+</project>
