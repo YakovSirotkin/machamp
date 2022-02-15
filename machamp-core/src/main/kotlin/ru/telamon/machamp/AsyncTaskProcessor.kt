@@ -14,7 +14,7 @@ import javax.annotation.PreDestroy
 @Component
 class AsyncTaskProcessor(
     private val asyncTaskDao: AsyncTaskDao,
-    @Value("\${async.task.processor.threads.count:10}")
+    @Value("\${machamp.processor.threads:10}")
     private val threadsCount: Int,
     private val taskHandlers: List<AsyncTaskHandler>
 ) {
