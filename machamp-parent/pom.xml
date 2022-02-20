@@ -14,6 +14,8 @@
 
     <description>machamp - async task processing engine</description>
 
+    <url>https://github.com/YakovSirotkin/machamp</url>
+
     <distributionManagement>
         <repository>
             <id>ossrh</id>
@@ -22,6 +24,29 @@
             <layout>default</layout>
         </repository>
     </distributionManagement>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Yakov Sirotkin</name>
+            <email>yasha@telamon.ru</email>
+            <organization>person</organization>
+            <organizationUrl>http://www.telamon.ru</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/YakovSirotkin/machamp.git</connection>
+        <developerConnection>scm:git:ssh://github.com:YakovSirotkin/machamp.git</developerConnection>
+        <url>http://github.com/YakovSirotkin/machamp/tree/master</url>
+    </scm>
 
     <properties>
         <modular-name>parent</modular-name>
