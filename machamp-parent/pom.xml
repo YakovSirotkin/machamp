@@ -61,6 +61,7 @@
         <springboot.version>2.6.3</springboot.version>
         <jackson.version>2.13.1</jackson.version>
         <junit-jupiter.version>5.7.0</junit-jupiter.version>
+        <dokka.version>1.6.10</dokka.version>
     </properties>
 
     <build>
