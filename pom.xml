@@ -3,7 +3,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ru.telamon</groupId>
     <artifactId>machamp</artifactId>
     <version>0.0.1</version>
     <packaging>pom</packaging>
@@ -15,15 +14,24 @@
         <relativePath>./machamp-parent</relativePath>
     </parent>
 
-    <name>machamp</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Async task processor engine for Spring Boot and PostgreSQL</description>
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>https://raw.githubusercontent.com/YakovSirotkin/machamp/main/LICENSE</url>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <name>Yakov Sirotkin</name>
+            <email>yasha@telamon.ru</email>
+            <organization>person</organization>
+            <organizationUrl>http://www.telamon.ru</organizationUrl>
+        </developer>
+    </developers>
 
     <distributionManagement>
         <repository>
@@ -32,6 +40,12 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git://github.com/YakovSirotkin/machamp.git</connection>
+        <developerConnection>scm:git:ssh://github.com:YakovSirotkin/machamp.git</developerConnection>
+        <url>http://github.com/YakovSirotkin/machamp/tree/master</url>
+    </scm>
 
     <modules>
         <module>machamp-parent</module>
