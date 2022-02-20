@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Value
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
+/**
+ * Core class that takes tasks from database and process it with [AsyncTaskHandler] implementations.
+ */
 @Component
 class AsyncTaskProcessor(
     private val asyncTaskDao: AsyncTaskDao,

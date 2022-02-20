@@ -8,6 +8,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Component
 import java.sql.Statement
 
+/**
+ * Database layer
+ */
 @Component
 class AsyncTaskDao @Autowired constructor(
     private val jdbcTemplate: JdbcTemplate,
@@ -17,6 +20,12 @@ class AsyncTaskDao @Autowired constructor(
         private val logger = LoggerFactory.getLogger(this::class.java)
     }
 
+    /**
+     * Creates task in database.
+     * @param taskType type of the task
+     * @param description data required for task processing
+     * @return taskId in database
+     */
     fun createTask(taskType: String, description: String): Long {
         val generatedKeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({
@@ -31,6 +40,10 @@ class AsyncTaskDao @Autowired constructor(
         return taskId
     }
 
+    /**
+     * Takes one task with `process_time` in the past from database and moves its `process_time` to the future.
+     * @return one [AsyncTask] or null
+     */
     fun getTask(): AsyncTask? {
         var response: AsyncTask? = null
         jdbcTemplate.query("UPDATE async_task " +
@@ -44,6 +57,10 @@ class AsyncTaskDao @Autowired constructor(
         return response
     }
 
+    /**
+     * Deletes task from database
+     * @param taskId taskId i database
+     */
     fun deleteTask(taskId: Long) {
         jdbcTemplate.update("DELETE FROM async_task WHERE task_id = ?", taskId)
     }
