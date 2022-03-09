@@ -24,11 +24,12 @@ class SumTest @Autowired constructor(
 
     companion object {
         @Container
-        private val postgresDB: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:12")
-            .withDatabaseName("testdb")
-            .withUsername("postgres")
-            .withPassword("postgres")
-            .withInitScript("sql/001-init.sql")
+        private val postgresDB = PostgreSQLContainer<Nothing>("postgres:12").apply {
+            withDatabaseName("testdb")
+            withUsername("postgres")
+            withPassword("postgres")
+            withInitScript("sql/001-init.sql")
+        }
 
         @JvmStatic
         @DynamicPropertySource
@@ -59,8 +60,8 @@ class SumTest @Autowired constructor(
             val targetSum = (n * threads) * (n * threads - 1) / 2
             do {
                 delay(1000)
-                println(sumAsyncTaskHandler.getSum().toString() + " from "  + targetSum)
-            } while ( sumAsyncTaskHandler.getSum() != targetSum)
+                println(sumAsyncTaskHandler.getSum().toString() + " from " + targetSum)
+            } while (sumAsyncTaskHandler.getSum() != targetSum)
         }
     }
 }
@@ -84,7 +85,7 @@ open class SumAsyncTaskHandler : AsyncTaskHandler {
         return true
     }
 
-    fun getSum() : Long {
+    fun getSum(): Long {
         return sum.get()
     }
 }
