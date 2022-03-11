@@ -1,15 +1,12 @@
 package ru.telamon.machamp
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.springframework.stereotype.Component
+import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
+import kotlin.system.measureTimeMillis
 
 /**
  * Core class that takes tasks from database and process it with [AsyncTaskHandler] implementations.
@@ -23,7 +20,7 @@ class AsyncTaskProcessor(
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
-    private lateinit var jobs: Array<Job>
+    private lateinit var jobs: List<Job>
     private val taskHandlersMap = HashMap<String, AsyncTaskHandler>()
 
     private var continueProcessing: Boolean = true
@@ -36,7 +33,7 @@ class AsyncTaskProcessor(
             taskHandlersMap[it.getType()] = it
         }
 
-        jobs = Array(threadsCount) { i ->
+        jobs = List(threadsCount) { i ->
             logger.info("Launching task processor $i")
             GlobalScope.launch {
                 logger.info("Starting task processor $i")
@@ -46,8 +43,10 @@ class AsyncTaskProcessor(
                         logger.debug("Getting tasks for task processor $i")
                         val task = asyncTaskDao.getTask()
                         if (task != null) {
-                            logger.info("Task $task loaded for {} ms by processor $i",
-                                System.currentTimeMillis() - taskLoadStart)
+                            logger.info(
+                                "Task $task loaded for {} ms by processor $i",
+                                System.currentTimeMillis() - taskLoadStart
+                            )
 
                             val taskType = task.taskType
                             val taskHandler = taskHandlersMap[taskType]
@@ -58,20 +57,22 @@ class AsyncTaskProcessor(
                                 val processStart = System.currentTimeMillis()
                                 try {
                                     val needToDelete = taskHandler.process(task)
-                                    logger.info("Task $task processed for {} ms, needToDelete = $needToDelete by processor $i",
-                                        System.currentTimeMillis() - processStart)
+                                    logger.info(
+                                        "Task $task processed for {} ms, needToDelete = $needToDelete by processor $i",
+                                        System.currentTimeMillis() - processStart
+                                    )
                                     if (needToDelete) {
-                                        logger.info("Start deleting task $task")
-                                        val deleteStart = System.currentTimeMillis()
-                                        asyncTaskDao.deleteTask(task.taskId)
-                                        logger.info("Task $task deleted for {} ms by processor $i",
-                                            System.currentTimeMillis() - deleteStart)
+                                        deleteTask(task, i)
                                     }
-                                    logger.info("Task $task processing completed for {} ms by processor $i",
-                                        System.currentTimeMillis() - taskLoadStart)
+                                    logger.info(
+                                        "Task $task processing completed for {} ms by processor $i",
+                                        System.currentTimeMillis() - taskLoadStart
+                                    )
                                 } catch (e: Throwable) {
-                                    logger.error("Task $task processing failed in {} ms by processor $i",
-                                        System.currentTimeMillis() - processStart, e)
+                                    logger.error(
+                                        "Task $task processing failed in {} ms by processor $i",
+                                        System.currentTimeMillis() - processStart, e
+                                    )
                                 }
                             }
                         } else {
@@ -87,15 +88,19 @@ class AsyncTaskProcessor(
         }
     }
 
+    private fun deleteTask(task: AsyncTask, processorId: Int) {
+        with(logger) {
+            info("Start deleting task $task")
+            val time = measureTimeMillis { asyncTaskDao.deleteTask(task.taskId) }
+            info("Task $task deleted for {} ms by processor $processorId", time)
+        }
+    }
+
     @PreDestroy
-    fun onDestroy() {
+    fun onDestroy() = runBlocking {
         continueProcessing = false
         logger.info("Shutting down task processing")
-        jobs.forEach {
-            runBlocking {
-                it.join()
-            }
-        }
+        jobs.joinAll()
         logger.info("Task processing stopped")
     }
 }
