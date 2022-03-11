@@ -4,7 +4,6 @@ import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import ru.telamon.machamp.conf.MachampCoroutineScope
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 import kotlin.system.measureTimeMillis
@@ -36,7 +35,7 @@ class AsyncTaskProcessor(
 
         jobs = List(threadsCount) { i ->
             logger.info("Launching task processor $i")
-            MachampCoroutineScope.launch {
+            GlobalScope.launch {
                 logger.info("Starting task processor $i")
                 while (continueProcessing) {
                     try {
