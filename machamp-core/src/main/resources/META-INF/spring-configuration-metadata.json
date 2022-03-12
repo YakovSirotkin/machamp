@@ -1,0 +1,26 @@
+{
+  "groups": [
+    {
+      "name": "machamp",
+      "type": "ru.telamon.machamp.conf.MachampProperties",
+      "sourceType": "ru.telamon.machamp.conf.MachampProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "machamp.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable async processing.",
+      "sourceType": "ru.telamon.machamp.conf.MachampProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "machamp.processor-parallelism-level",
+      "type": "java.lang.Integer",
+      "description": "Parallel workers number.",
+      "sourceType": "ru.telamon.machamp.conf.MachampProperties",
+      "defaultValue": 10
+    }
+  ],
+  "hints": []
+}

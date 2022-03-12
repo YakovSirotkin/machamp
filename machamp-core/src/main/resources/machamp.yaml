@@ -1,0 +1,4 @@
+machamp:
+  enabled: true
+  processor:
+    parallelism-level: 10

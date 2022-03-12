@@ -2,8 +2,6 @@ package ru.telamon.machamp
 
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 import kotlin.system.measureTimeMillis
@@ -11,11 +9,9 @@ import kotlin.system.measureTimeMillis
 /**
  * Core class that takes tasks from database and process it with [AsyncTaskHandler] implementations.
  */
-@Component
 class AsyncTaskProcessor(
     private val asyncTaskDao: AsyncTaskDao,
-    @Value("\${machamp.processor.threads:10}")
-    private val threadsCount: Int,
+    private val parallelismLevel: Int,
     private val taskHandlers: List<AsyncTaskHandler>
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -33,7 +29,7 @@ class AsyncTaskProcessor(
             taskHandlersMap[it.getType()] = it
         }
 
-        jobs = List(threadsCount) { i ->
+        jobs = List(parallelismLevel) { i ->
             logger.info("Launching task processor $i")
             GlobalScope.launch {
                 logger.info("Starting task processor $i")
