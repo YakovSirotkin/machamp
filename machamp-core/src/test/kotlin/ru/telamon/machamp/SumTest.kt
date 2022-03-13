@@ -20,7 +20,7 @@ import kotlin.random.Random
 class SumTest @Autowired constructor(
     private var sumAsyncTaskHandler: SumAsyncTaskHandler,
     private var asyncTaskDao: AsyncTaskDao
-) {
+): BaseTest() {
 
     companion object {
         @Container

@@ -29,13 +29,15 @@ class AsyncTaskDao @Autowired constructor(
     fun createTask(taskType: String, description: String): Long {
         val generatedKeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({
-            val ps = it.prepareStatement("INSERT INTO async_task (task_type, description) VALUES (?, ?::json)",
-                    Statement.RETURN_GENERATED_KEYS)
+            val ps = it.prepareStatement(
+                "INSERT INTO async_task (task_type, description) VALUES (?, ?::json)",
+                Statement.RETURN_GENERATED_KEYS
+            )
             ps.setString(1, taskType)
             ps.setString(2, description)
             ps
         }, generatedKeyHolder)
-        val taskId =  generatedKeyHolder.keys!!["task_id"] as Long
+        val taskId = generatedKeyHolder.keys!!["task_id"] as Long
         logger.info("Created task $taskId of type $taskType with description $description")
         return taskId
     }
@@ -53,15 +55,36 @@ class AsyncTaskDao @Autowired constructor(
                 " (SELECT task_id FROM async_task WHERE process_time < NOW()" +
                 " LIMIT 1 FOR UPDATE SKIP LOCKED)" +
                 " RETURNING task_id, task_type, description",
-                { rs, i -> response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3))) })
+            { rs, i -> response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3))) })
         return response
     }
 
     /**
      * Deletes task from database
-     * @param taskId taskId i database
+     * @param taskId taskId in database
      */
     fun deleteTask(taskId: Long) {
         jdbcTemplate.update("DELETE FROM async_task WHERE task_id = ?", taskId)
+    }
+
+    fun tasks(limit: Int): List<AsyncTaskDto> {
+        return jdbcTemplate.query(
+            "SELECT task_id, task_type, description, attempt, process_time, taken FROM async_task LIMIT ?",
+            { rs, i ->
+                AsyncTaskDto(
+                    rs.getLong(1), rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4), rs.getString(5), rs.getString(6)
+                )
+            },
+            limit
+        )
+
+    }
+
+    fun processNow(taskId: Long, expectedAttempt: Int): Int {
+        return jdbcTemplate.update(
+            "UPDATE async_task SET process_time = NOW() WHERE task_id = ? and attempt = ?", taskId, expectedAttempt
+        )
     }
 }
