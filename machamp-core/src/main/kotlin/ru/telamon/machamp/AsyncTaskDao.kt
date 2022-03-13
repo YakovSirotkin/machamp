@@ -2,17 +2,14 @@ package ru.telamon.machamp
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
-import org.springframework.stereotype.Component
 import java.sql.Statement
 
 /**
  * Database layer
  */
-@Component
-class AsyncTaskDao @Autowired constructor(
+class AsyncTaskDao(
     private val jdbcTemplate: JdbcTemplate,
     private val objectMapper: ObjectMapper
 ) {
