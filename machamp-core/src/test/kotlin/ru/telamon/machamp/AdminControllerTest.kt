@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.getForObject
+import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.test.annotation.DirtiesContext
 import org.testcontainers.junit.jupiter.Testcontainers
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -15,8 +17,9 @@ import kotlin.time.toDuration
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
-class AdminControllerTest @Autowired constructor(
-) : BaseTest() {
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+class AdminControllerTest @Autowired constructor(jdbcTemplate: JdbcTemplate) :
+    BaseTest(jdbcTemplate) {
 
     @Autowired
     lateinit var restTemplate: TestRestTemplate
@@ -49,7 +52,8 @@ class AdminControllerTest @Autowired constructor(
             delay(2L.toDuration(DurationUnit.SECONDS)) //wait for second processing attempt
         }
         assertEquals(2, getAllTasks()[0].attempt, "Should be 2 attempt")
-        val response = restTemplate.postForObject("/machamp/admin/process/$taskId/1", null, UpdateResponseDto::class.java)
+        val response =
+            restTemplate.postForObject("/machamp/admin/process/$taskId/1", null, UpdateResponseDto::class.java)
         assertEquals(0, response.rowsUpdated, "No rows should be updated")
         runBlocking {
             delay(2L.toDuration(DurationUnit.SECONDS)) //let time to do 3rd attempt
@@ -71,6 +75,6 @@ class AdminControllerTest @Autowired constructor(
     private fun addTask(id: Long): Long =
         restTemplate.postForObject(
             "/machamp/admin/add",
-            CreateAsyncTaskDto("TEST", "{\"id\":" + id + "}"), TaskIdDto::class.java
+            CreateAsyncTaskDto("TEST", "{\"id\":$id}"), TaskIdDto::class.java
         ).taskId
 }

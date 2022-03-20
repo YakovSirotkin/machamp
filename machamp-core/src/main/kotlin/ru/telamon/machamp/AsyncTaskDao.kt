@@ -62,9 +62,30 @@ class AsyncTaskDao @Autowired constructor(
     /**
      * Deletes task from database
      * @param taskId taskId in database
+     * @return number of deleted tasks
      */
-    fun deleteTask(taskId: Long) {
-        jdbcTemplate.update("DELETE FROM async_task WHERE task_id = ?", taskId)
+    fun deleteTask(taskId: Long): Int {
+        return jdbcTemplate.update("DELETE FROM async_task WHERE task_id = ?", taskId)
+    }
+
+    /**
+     * Delete previous equivalent tasks
+     * @param lastTaskId newest taskId in database
+     * @param taskType task type
+     * @param property JSON property im description column we check for task equivalence
+     * @param value expected value in [property] that corresponds to the same task
+     * @return number of delete rows
+     */
+    fun deleteDuplicateTask(lastTaskId: Long, taskType: String, property: String, value: Long): Int {
+        val deleted = jdbcTemplate.update(
+            "DELETE FROM async_task WHERE " +
+                    " task_id < ? AND task_type = ? AND CAST(description ->> ? AS BIGINT)  = ? ",
+            lastTaskId, taskType, property, value
+        )
+        if (deleted > 0) {
+            logger.info("Deleted $deleted tasks of taskType $taskType with $property = $value")
+        }
+        return deleted
     }
 
     fun tasks(limit: Int): List<AsyncTaskDto> {
@@ -79,7 +100,6 @@ class AsyncTaskDao @Autowired constructor(
             },
             limit
         )
-
     }
 
     fun processNow(taskId: Long, expectedAttempt: Int): Int {
