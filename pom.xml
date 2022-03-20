@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>machamp</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>ru.telamon</groupId>
         <artifactId>machamp-parent</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3</version>
         <relativePath>./machamp-parent</relativePath>
     </parent>
 
