@@ -13,7 +13,11 @@ import org.testcontainers.junit.jupiter.Testcontainers
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.random.Random
 
-@SpringBootTest
+@SpringBootTest(
+    properties = [
+        "machamp.priority.enabled=false"
+    ]
+)
 @Testcontainers
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class SumTest @Autowired constructor(

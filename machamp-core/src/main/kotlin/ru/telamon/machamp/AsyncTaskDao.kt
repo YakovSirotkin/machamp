@@ -3,6 +3,7 @@ package ru.telamon.machamp
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Component
@@ -14,7 +15,9 @@ import java.sql.Statement
 @Component
 class AsyncTaskDao @Autowired constructor(
     private val jdbcTemplate: JdbcTemplate,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    @Value("\${machamp.priority.enabled:true}")
+    private val priorityEnabled: Boolean
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
@@ -24,17 +27,25 @@ class AsyncTaskDao @Autowired constructor(
      * Creates task in database.
      * @param taskType type of the task
      * @param description data required for task processing
+     * @param priority task priority, process tasks with less priority value earlier
+     * @param delayInSeconds delay before first attempt in seconds
      * @return taskId in database
      */
-    fun createTask(taskType: String, description: String): Long {
+    fun createTask(
+        taskType: String, description: String,
+        priority: Int = 100, delayInSeconds: Int = 0
+    ): Long {
         val generatedKeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({
             val ps = it.prepareStatement(
-                "INSERT INTO async_task (task_type, description) VALUES (?, ?::json)",
+                "INSERT INTO async_task (task_type, description, priority, process_time) " +
+                        " VALUES (?, ?::json, ?, NOW() + ? * interval '1 second' )",
                 Statement.RETURN_GENERATED_KEYS
             )
             ps.setString(1, taskType)
             ps.setString(2, description)
+            ps.setInt(3, priority)
+            ps.setInt(4, delayInSeconds)
             ps
         }, generatedKeyHolder)
         val taskId = generatedKeyHolder.keys!!["task_id"] as Long
@@ -48,13 +59,19 @@ class AsyncTaskDao @Autowired constructor(
      */
     fun getTask(): AsyncTask? {
         var response: AsyncTask? = null
-        jdbcTemplate.query("UPDATE async_task " +
-                " SET process_time = NOW() + power(2, LEAST(14, attempt)) * interval '1 minute', " +
-                " attempt = LEAST(30000, attempt + 1), " +
-                " taken = NOW() WHERE task_id = " +
-                " (SELECT task_id FROM async_task WHERE process_time < NOW()" +
-                " LIMIT 1 FOR UPDATE SKIP LOCKED)" +
-                " RETURNING task_id, task_type, description",
+        jdbcTemplate.query(
+            "UPDATE async_task " +
+                    " SET process_time = NOW() + power(2, LEAST(14, attempt)) * interval '1 minute', " +
+                    " attempt = LEAST(30000, attempt + 1), " +
+                    " taken = NOW() WHERE task_id = " +
+                    " (SELECT task_id FROM async_task WHERE process_time < NOW()" +
+                    if (priorityEnabled) {
+                        " ORDER BY priority ASC "
+                    } else {
+                        ""
+                    } +
+                    " LIMIT 1 FOR UPDATE SKIP LOCKED)" +
+                    " RETURNING task_id, task_type, description",
             { rs, i -> response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3))) })
         return response
     }

@@ -3,6 +3,7 @@ package ru.telamon.machamp
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
@@ -28,6 +29,12 @@ class AsyncTaskProcessor(
 
     private var continueProcessing: Boolean = true
 
+    /**
+     * You need this method to start processing in case of `spring.main.lazy-initialization=true`
+     */
+    fun activate() {
+    }
+
     @PostConstruct
     fun init() {
         logger.info("Starting async task listener")
@@ -46,8 +53,10 @@ class AsyncTaskProcessor(
                         logger.debug("Getting tasks for task processor $i")
                         val task = asyncTaskDao.getTask()
                         if (task != null) {
-                            logger.info("Task $task loaded for {} ms by processor $i",
-                                System.currentTimeMillis() - taskLoadStart)
+                            logger.info(
+                                "Task $task loaded for {} ms by processor $i",
+                                System.currentTimeMillis() - taskLoadStart
+                            )
 
                             val taskType = task.taskType
                             val taskHandler = taskHandlersMap[taskType]
@@ -58,20 +67,28 @@ class AsyncTaskProcessor(
                                 val processStart = System.currentTimeMillis()
                                 try {
                                     val needToDelete = taskHandler.process(task)
-                                    logger.info("Task $task processed for {} ms, needToDelete = $needToDelete by processor $i",
-                                        System.currentTimeMillis() - processStart)
+                                    logger.info(
+                                        "Task $task processed for {} ms, needToDelete = $needToDelete by processor $i",
+                                        System.currentTimeMillis() - processStart
+                                    )
                                     if (needToDelete) {
                                         logger.info("Start deleting task $task")
                                         val deleteStart = System.currentTimeMillis()
                                         asyncTaskDao.deleteTask(task.taskId)
-                                        logger.info("Task $task deleted for {} ms by processor $i",
-                                            System.currentTimeMillis() - deleteStart)
+                                        logger.info(
+                                            "Task $task deleted for {} ms by processor $i",
+                                            System.currentTimeMillis() - deleteStart
+                                        )
                                     }
-                                    logger.info("Task $task processing completed for {} ms by processor $i",
-                                        System.currentTimeMillis() - taskLoadStart)
+                                    logger.info(
+                                        "Task $task processing completed for {} ms by processor $i",
+                                        System.currentTimeMillis() - taskLoadStart
+                                    )
                                 } catch (e: Throwable) {
-                                    logger.error("Task $task processing failed in {} ms by processor $i",
-                                        System.currentTimeMillis() - processStart, e)
+                                    logger.error(
+                                        "Task $task processing failed in {} ms by processor $i",
+                                        System.currentTimeMillis() - processStart, e
+                                    )
                                 }
                             }
                         } else {
@@ -91,10 +108,8 @@ class AsyncTaskProcessor(
     fun onDestroy() {
         continueProcessing = false
         logger.info("Shutting down task processing")
-        jobs.forEach {
-            runBlocking {
-                it.join()
-            }
+        runBlocking {
+            joinAll(*jobs)
         }
         logger.info("Task processing stopped")
     }
