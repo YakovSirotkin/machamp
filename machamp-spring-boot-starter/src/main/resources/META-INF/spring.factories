@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-ru.telamon.machamp.springboot.MachampAutoConfiguration
+ru.telamon.machamp.springboot.AsyncTaskDaoAutoConfiguration,\
+ru.telamon.machamp.springboot.AsyncTaskProcessorAutoConfiguration

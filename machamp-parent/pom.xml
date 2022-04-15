@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.telamon</groupId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <artifactId>machamp-parent</artifactId>
     <packaging>pom</packaging>
     <name>machamp-parent</name>
