@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>com.github.yakovsirotkin</groupId>
+        <groupId>io.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
         <version>0.0.7</version>
         <relativePath>../machamp-parent</relativePath>
@@ -184,7 +184,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.yakovsirotkin</groupId>
+            <groupId>io.github.yakovsirotkin</groupId>
             <artifactId>machamp-core</artifactId>
             <version>0.0.7</version>
         </dependency>

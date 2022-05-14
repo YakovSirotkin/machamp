@@ -6,7 +6,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.yakovsirotkin</groupId>
+    <groupId>io.github.yakovsirotkin</groupId>
     <version>0.0.7</version>
     <artifactId>machamp-parent</artifactId>
     <packaging>pom</packaging>
@@ -73,7 +73,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>com.github.yakovsirotkin.machamp.${modular-name}</Automatic-Module-Name>
+                            <Automatic-Module-Name>io.github.yakovsirotkin.machamp.${modular-name}</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

@@ -1,4 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.yakovsirotkin.machamp.springboot.AsyncTaskDaoAutoConfiguration,\
-com.github.yakovsirotkin.machamp.springboot.AsyncTaskProcessorAutoConfiguration
+io.github.yakovsirotkin.machamp.springboot.AsyncTaskDaoAutoConfiguration,\
+io.github.yakovsirotkin.machamp.springboot.AsyncTaskProcessorAutoConfiguration

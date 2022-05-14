@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
 
     <parent>
-        <groupId>com.github.yakovsirotkin</groupId>
+        <groupId>io.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
         <version>0.0.7</version>
         <relativePath>./machamp-parent</relativePath>
