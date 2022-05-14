@@ -1,4 +1,4 @@
-package ru.telamon.machamp.springboot
+package com.github.yakovsirotkin.machamp.springboot
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcTemplate
-import ru.telamon.machamp.AsyncTaskDao
+import com.github.yakovsirotkin.machamp.AsyncTaskDao
 
 
 /**

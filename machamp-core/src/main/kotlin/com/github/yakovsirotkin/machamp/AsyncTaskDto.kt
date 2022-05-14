@@ -1,4 +1,4 @@
-package ru.telamon.machamp
+package com.github.yakovsirotkin.machamp
 
 /**
  * Data structure with full info about AsyncTask for admin interface

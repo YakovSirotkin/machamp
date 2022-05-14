@@ -1,4 +1,4 @@
-package ru.telamon.machamp.springboot
+package com.github.yakovsirotkin.machamp.springboot
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

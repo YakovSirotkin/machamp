@@ -1,4 +1,4 @@
-package ru.telamon.machamp
+package com.github.yakovsirotkin.machamp
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

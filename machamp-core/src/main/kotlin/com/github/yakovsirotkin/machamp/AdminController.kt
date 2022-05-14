@@ -1,4 +1,4 @@
-package ru.telamon.machamp
+package com.github.yakovsirotkin.machamp
 
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.DeleteMapping

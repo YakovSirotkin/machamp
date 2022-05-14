@@ -1,4 +1,4 @@
-package ru.telamon.machamp
+package com.github.yakovsirotkin.machamp
 
 import org.junit.After
 import org.springframework.jdbc.core.JdbcTemplate

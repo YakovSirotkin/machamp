@@ -5,9 +5,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <groupId>ru.telamon</groupId>
+        <groupId>com.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
-        <version>0.0.6</version>
+        <version>0.0.7</version>
         <relativePath>../machamp-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>

@@ -1,4 +1,4 @@
-package ru.telamon.machamp
+package com.github.yakovsirotkin.machamp
 
 /**
  * Interface that should be implemented to process specific task.
