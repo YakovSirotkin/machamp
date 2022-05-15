@@ -9,12 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 import org.springframework.test.annotation.DirtiesContext
+import org.springframework.transaction.support.TransactionTemplate
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @SpringBootTest(
     properties = [
-        "machamp.processor.threads=1",
-        "spring.main.lazy-initialization=true"
+        "machamp.processor.threads=1"
     ]
 )
 @Testcontainers
@@ -22,23 +22,24 @@ import org.testcontainers.junit.jupiter.Testcontainers
 class PriorityTest @Autowired constructor(
     private val priorityAsyncTaskHandler: PriorityAsyncTaskHandler,
     private val asyncTaskDao: AsyncTaskDao,
-    private val asyncTaskProcessor: AsyncTaskProcessor,
+    private val transactionTemplate: TransactionTemplate,
     jdbcTemplate: JdbcTemplate
 ) :
     BaseTest(jdbcTemplate) {
 
     @Test
     fun priorityTest() {
-        val n = 10
-        for (i in 1..n) {
-            val priority = (i + n/2) % n + 1
-            asyncTaskDao.createTask(
-                priorityAsyncTaskHandler.getType(),
-                "{\"value\": $priority}",
-                priority
-            )
+        val n = 100
+        transactionTemplate.execute {
+            for (i in 1..n) {
+                val priority = (i + n / 2) % n + 1
+                asyncTaskDao.createTask(
+                    priorityAsyncTaskHandler.getType(),
+                    "{\"value\": $priority}",
+                    priority
+                )
+            }
         }
-        asyncTaskProcessor.activate()
         val processed = priorityAsyncTaskHandler.getProcessed()
         runBlocking {
             while (processed.size < n) {

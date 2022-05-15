@@ -161,6 +161,10 @@ import io.github.yakovsirotkin.machamp.AsyncTaskDao;
                 0 //delay in seconds
         );  
 ```
+##Lazy initialization
+
+In case of `spring.main.lazy-initialization=true` you should initialize bean that depends on
+`io.github.yakovsirotkin.machamp.AsyncTaskProcessor` or it will not process anything.
 
 ##Configuration parameters
 
@@ -168,3 +172,4 @@ import io.github.yakovsirotkin.machamp.AsyncTaskDao;
 |---------------------------|---------------|------------------------------------------------------------------------------------|
 | machamp.processor.threads | `10`          | Number of coroutines that process async tasks in parallel.                         |
 | machamp.priority.enabled  | `true` | Load tasks with less priority values first if `true` or ignore priority otherwise. |
+ 
