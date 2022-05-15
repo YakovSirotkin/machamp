@@ -29,12 +29,6 @@ class AsyncTaskProcessor(
 
     private var continueProcessing: Boolean = true
 
-    /**
-     * You need this method to start processing in case of `spring.main.lazy-initialization=true`
-     */
-    fun activate() {
-    }
-
     @PostConstruct
     fun init() {
         logger.info("Starting async task listener")
@@ -93,11 +87,11 @@ class AsyncTaskProcessor(
                             }
                         } else {
                             logger.debug("No tasks for task processor $i")
+                            delay(1000)
                         }
                     } catch (e: Throwable) {
                         logger.error("Error trying to load process task in processor $i", e)
                     }
-                    delay(1000)
                 }
                 logger.info("Job processor $i will not process more tasks!")
             }
