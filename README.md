@@ -1,4 +1,4 @@
-#machamp
+# machamp
 
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.10-blue.svg?cacheSeconds=2592000" />
@@ -8,7 +8,7 @@
 </p>
 Async task processing engine for Spring Boot and PostgreSQL
 
-#Design 
+# Design 
 Let's assume that an application needs to email to the user, but SMTP host is unreachable. Throwing exception to user 
 after connection timeout seems bad. Resending immediately will not help. Resending with a delay is better, but if the 
 number of attempts is not limited, we can easily overload the server if the outage continue. Looks like we need to store information
@@ -32,7 +32,7 @@ systems.
 
 <a href="http://telamon.ru/articles/async.html">Short article in Russian</a>
 
-#Usage
+# Usage
 
 ## Download
 
@@ -62,7 +62,7 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.10'
 @file:DependsOn("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.10")
 ```
 
-##Database table creation
+## Database table creation
 [src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-core/src/main/resources/sql/001-init.sql)
 ```
 CREATE TABLE async_task
@@ -77,9 +77,9 @@ CREATE TABLE async_task
     taken        TIMESTAMPTZ          DEFAULT NULL
 );
 ```
-##Task Definition
+## Task Definition
 
-###Kotlin
+### Kotlin
 ```
 package io.github.yakovsirotkin.machamp
 
@@ -103,7 +103,7 @@ class MyAsyncTaskHandler : AsyncTaskHandler {
 }
 ```
 
-###Java
+### Java
 ```
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
@@ -129,9 +129,9 @@ public class MyAsyncTaskHandler implements AsyncTaskHandler {
     }
 }
 ```
-##Adding async task
+## Adding async task
 
-###Kotlin
+### Kotlin
 ```
 import io.github.yakovsirotkin.machamp.AsyncTaskDao
 
@@ -146,7 +146,7 @@ private val asyncTaskDao: AsyncTaskDao, //in bean constructor
         )
 ```
 
-###Java
+### Java
 
 ```
 import io.github.yakovsirotkin.machamp.AsyncTaskDao;
@@ -161,12 +161,12 @@ import io.github.yakovsirotkin.machamp.AsyncTaskDao;
                 0 //delay in seconds
         );  
 ```
-##Lazy initialization
+## Lazy initialization
 
 In case of `spring.main.lazy-initialization=true` you should initialize bean that depends on
 `io.github.yakovsirotkin.machamp.AsyncTaskProcessor` or it will not process anything.
 
-##Configuration parameters
+## Configuration parameters
 
 | Option                    | default value | description                                                                        |
 |---------------------------|---------------|------------------------------------------------------------------------------------|
