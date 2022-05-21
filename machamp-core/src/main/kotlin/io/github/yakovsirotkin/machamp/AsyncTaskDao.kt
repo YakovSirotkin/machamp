@@ -17,7 +17,9 @@ class AsyncTaskDao @Autowired constructor(
     private val jdbcTemplate: JdbcTemplate,
     private val objectMapper: ObjectMapper,
     @Value("\${machamp.priority.enabled:true}")
-    private val priorityEnabled: Boolean
+    private val priorityEnabled: Boolean,
+    @Value("\${machamp.priority.defaultValue:100}")
+    private val priorityDefaultValue: Int
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
@@ -33,7 +35,7 @@ class AsyncTaskDao @Autowired constructor(
      */
     fun createTask(
         taskType: String, description: String,
-        priority: Int = 100, delayInSeconds: Int = 0
+        priority: Int = priorityDefaultValue, delayInSeconds: Int = 0
     ): Long {
         val generatedKeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({
@@ -91,16 +93,24 @@ class AsyncTaskDao @Autowired constructor(
      * @param taskType task type
      * @param property JSON property im description column we check for task equivalence
      * @param value expected value in [property] that corresponds to the same task
+     * @param priority only tasks with priority greater or equal will be removed
      * @return number of delete rows
      */
-    fun deleteDuplicateTask(lastTaskId: Long, taskType: String, property: String, value: Long): Int {
+    fun deleteDuplicateTask(
+        lastTaskId: Long,
+        taskType: String,
+        property: String,
+        value: Long,
+        priority: Int = priorityDefaultValue
+    ): Int {
         val deleted = jdbcTemplate.update(
             "DELETE FROM async_task WHERE " +
-                    " task_id < ? AND task_type = ? AND CAST(description ->> ? AS BIGINT)  = ? ",
-            lastTaskId, taskType, property, value
+                    " task_id < ? AND task_type = ? AND CAST(description ->> ? AS BIGINT) = ? " +
+                    " AND priority >= ?",
+            lastTaskId, taskType, property, value, priority
         )
         if (deleted > 0) {
-            logger.info("Deleted $deleted tasks of taskType $taskType with $property = $value")
+            logger.info("Deleted $deleted tasks of taskType $taskType with $property = $value and priority >= $priority")
         }
         return deleted
     }

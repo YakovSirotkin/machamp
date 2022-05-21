@@ -54,12 +54,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <kotlin.version>1.6.10</kotlin.version>
+        <kotlin.version>1.6.21</kotlin.version>
         <kotlin-coroutines.version>1.6.0</kotlin-coroutines.version>
         <testcontainers.version>1.16.2</testcontainers.version>
-        <postgresql.version>42.3.2</postgresql.version>
-        <springboot.version>2.6.3</springboot.version>
-        <jackson.version>2.13.1</jackson.version>
+        <postgresql.version>42.3.5</postgresql.version>
+        <springboot.version>2.6.7</springboot.version>
+        <jackson.version>2.13.3</jackson.version>
         <junit-jupiter.version>5.7.0</junit-jupiter.version>
         <dokka.version>1.6.10</dokka.version>
     </properties>

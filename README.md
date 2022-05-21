@@ -168,8 +168,9 @@ In case of `spring.main.lazy-initialization=true` you should initialize bean tha
 
 ## Configuration parameters
 
-| Option                    | default value | description                                                                        |
-|---------------------------|---------------|------------------------------------------------------------------------------------|
-| machamp.processor.threads | `10`          | Number of coroutines that process async tasks in parallel.                         |
-| machamp.priority.enabled  | `true` | Load tasks with less priority values first if `true` or ignore priority otherwise. |
+| Option                               | default value | description                                                                        |
+|--------------------------------------|---------------|------------------------------------------------------------------------------------|
+| machamp.processor.threads            | `10`          | Number of coroutines that process async tasks in parallel.                         |
+| machamp.priority.enabled             | `true`        | Load tasks with less priority values first if `true` or ignore priority otherwise. |
+| machamp.priority.defaultValue | `100`          | Default priority value for async tasks.                                            |
  

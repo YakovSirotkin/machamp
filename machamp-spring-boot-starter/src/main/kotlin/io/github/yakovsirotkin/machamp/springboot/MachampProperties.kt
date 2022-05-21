@@ -16,5 +16,6 @@ class MachampProperties {
 
     class Priority {
         var enabled: Boolean = true
+        var defaultValue: Int = 100
     }
 }

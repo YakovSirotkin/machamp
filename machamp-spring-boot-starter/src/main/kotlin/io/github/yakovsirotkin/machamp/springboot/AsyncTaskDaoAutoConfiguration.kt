@@ -25,6 +25,9 @@ open class AsyncTaskDaoAutoConfiguration {
         objectMapper: ObjectMapper,
         machampProperties: MachampProperties
     ): AsyncTaskDao {
-        return AsyncTaskDao(jdbcTemplate, objectMapper, machampProperties.priority.enabled)
+        return AsyncTaskDao(jdbcTemplate, objectMapper,
+            machampProperties.priority.enabled,
+            machampProperties.priority.defaultValue,
+        )
     }
 }

@@ -50,10 +50,21 @@ class CleanupDuplicatesTest @Autowired constructor(
         assertTrue(totalProcessed > 0, "Task should be processed")
         println("Processed $totalProcessed from $totalTasks")
     }
+
+    @Test
+    fun priorityAwarenessTest() {
+        duplicateTaskHandler.create(100, 1000)
+        duplicateTaskHandler.create(1000, 1000)
+
+        assertEquals(2, asyncTaskDao.tasks(100).size, "Should be 2 tasks")
+        val lastTaskId = duplicateTaskHandler.create(100, 1000)
+        assertEquals(1, asyncTaskDao.tasks(100).size, "Should be 1 task")
+        asyncTaskDao.deleteTask(lastTaskId)
+    }
 }
 
 @Component
-open class DuplicateTaskHandler constructor(val asyncTaskDao: AsyncTaskDao) : AsyncTaskHandler {
+open class DuplicateTaskHandler constructor(private val asyncTaskDao: AsyncTaskDao) : AsyncTaskHandler {
 
     val total = AtomicLong(0)
 
@@ -68,11 +79,12 @@ open class DuplicateTaskHandler constructor(val asyncTaskDao: AsyncTaskDao) : As
         return true
     }
 
-    fun create() {
+    fun create(priority: Int = 100, delay: Int = 0): Long {
         val property = "bob"
         val value = 42L
-        val createdTaskId = asyncTaskDao.createTask(getType(), "{\"$property\": $value}")
+        val createdTaskId = asyncTaskDao.createTask(getType(), "{\"$property\": $value}", priority, delay)
         created.incrementAndGet()
-        asyncTaskDao.deleteDuplicateTask(createdTaskId, getType(), property, value)
+        asyncTaskDao.deleteDuplicateTask(createdTaskId, getType(), property, value, priority)
+        return createdTaskId
     }
 }
