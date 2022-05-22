@@ -29,7 +29,7 @@ class PriorityTest @Autowired constructor(
 
     @Test
     fun priorityTest() {
-        val n = 100
+        val n = 30
         transactionTemplate.execute {
             for (i in 1..n) {
                 val priority = (i + n / 2) % n + 1

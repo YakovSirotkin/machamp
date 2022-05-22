@@ -15,7 +15,12 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = [
+        "machamp.adminEnabled=true",
+    ]
+)
 @Testcontainers
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class AdminControllerTest @Autowired constructor(jdbcTemplate: JdbcTemplate) :

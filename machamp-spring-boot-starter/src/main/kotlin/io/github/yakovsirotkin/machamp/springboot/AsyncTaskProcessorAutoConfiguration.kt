@@ -23,7 +23,8 @@ open class AsyncTaskProcessorAutoConfiguration {
     open fun asyncTaskProcessor(
         taskHandlers: List<AsyncTaskHandler>,
         machampProperties: MachampProperties,
-        asyncTaskDao: AsyncTaskDao, transactionTemplate: TransactionTemplate
+        asyncTaskDao: AsyncTaskDao,
+        transactionTemplate: TransactionTemplate
     ): AsyncTaskProcessor {
         return AsyncTaskProcessor(
             asyncTaskDao,

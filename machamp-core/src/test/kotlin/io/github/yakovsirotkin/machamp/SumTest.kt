@@ -31,7 +31,7 @@ class SumTest @Autowired constructor(
     fun sumTest() {
         runBlocking {
             val threads = 10
-            val n = 100L
+            val n = 30L
             for (mod in 0 until threads) {
                 launch {
                     for (i in 0 until n) {

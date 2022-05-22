@@ -27,7 +27,7 @@ class CleanupDuplicatesTest @Autowired constructor(
     @Test
     fun cleanDuplicatesTest() {
         val threads = 10
-        val n = 100L
+        val n = 30L
         runBlocking {
             for (mod in 0 until threads) {
                 launch {

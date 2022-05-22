@@ -1,7 +1,7 @@
 # machamp
 
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.10-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.0.11-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/yakovsirotkin/machamp/blob/master/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
   </a>
@@ -40,10 +40,10 @@ systems.
 
 ```gradle
 //gradle kotlin DSL
-implementation("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.10") 
+implementation("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11") 
 
 //gradle groovy DSL
-implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.10' 
+implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11' 
 ```
 
 ### Maven
@@ -52,14 +52,14 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.10'
 <dependency>
   <groupId>io.github.yakovsirotkin</groupId>
   <artifactId>machamp-spring-boot-starter</artifactId>
-  <version>0.0.10</version>
+  <version>0.0.11</version>
 </dependency>
 ```
 
 [kscript](https://github.com/holgerbrandl/kscript)
 
 ```kotlin
-@file:DependsOn("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.10")
+@file:DependsOn("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11")
 ```
 
 ## Database table creation
@@ -168,9 +168,10 @@ In case of `spring.main.lazy-initialization=true` you should initialize bean tha
 
 ## Configuration parameters
 
-| Option                               | default value | description                                                                        |
-|--------------------------------------|---------------|------------------------------------------------------------------------------------|
-| machamp.processor.threads            | `10`          | Number of coroutines that process async tasks in parallel.                         |
-| machamp.priority.enabled             | `true`        | Load tasks with less priority values first if `true` or ignore priority otherwise. |
-| machamp.priority.defaultValue | `100`          | Default priority value for async tasks.                                            |
+| Option                        | default value | description                                                                        |
+|-------------------------------|---------------|------------------------------------------------------------------------------------|
+| machamp.processor.threads     | `10`          | Number of coroutines that process async tasks in parallel.                         |
+| machamp.priority.enabled      | `true`        | Load tasks with less priority values first if `true` or ignore priority otherwise. |
+| machamp.priority.defaultValue | `100`         | Default priority value for async tasks.                                            |
+| machamp.adminEnabled          | `false`       | Allows to enable admin interface at /machamp/admin/                                |
  
