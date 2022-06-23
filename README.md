@@ -1,7 +1,7 @@
 # machamp
 
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.11-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.0.12-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/yakovsirotkin/machamp/blob/master/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
   </a>
@@ -40,10 +40,10 @@ systems.
 
 ```gradle
 //gradle kotlin DSL
-implementation("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11") 
+implementation("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.12") 
 
 //gradle groovy DSL
-implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11' 
+implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.12' 
 ```
 
 ### Maven
@@ -52,14 +52,14 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11'
 <dependency>
   <groupId>io.github.yakovsirotkin</groupId>
   <artifactId>machamp-spring-boot-starter</artifactId>
-  <version>0.0.11</version>
+  <version>0.0.12</version>
 </dependency>
 ```
 
 [kscript](https://github.com/holgerbrandl/kscript)
 
 ```kotlin
-@file:DependsOn("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11")
+@file:DependsOn("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.12")
 ```
 
 ## Database table creation
@@ -68,7 +68,7 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.11'
 CREATE TABLE async_task
 (
     task_id      BIGSERIAL PRIMARY KEY,
-    task_type    VARCHAR(255),
+    task_type    TEXT,
     description  JSON,
     attempt      SMALLINT    NOT NULL DEFAULT 0,
     priority     INTEGER     NOT NULL DEFAULT 100,
