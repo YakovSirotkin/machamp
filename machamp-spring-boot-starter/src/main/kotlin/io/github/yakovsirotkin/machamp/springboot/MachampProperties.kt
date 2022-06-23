@@ -12,6 +12,7 @@ class MachampProperties {
 
     class Processor {
        var threads: Int = 10
+       var useCoroutines: Boolean = false
     }
 
     class Priority {

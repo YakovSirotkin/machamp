@@ -28,7 +28,9 @@ open class AsyncTaskProcessorAutoConfiguration {
     ): AsyncTaskProcessor {
         return AsyncTaskProcessor(
             asyncTaskDao,
-            machampProperties.processor.threads, taskHandlers
+            machampProperties.processor.threads,
+            machampProperties.processor.useCoroutines,
+            taskHandlers
         )
     }
 }
