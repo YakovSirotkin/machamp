@@ -3,6 +3,7 @@ package io.github.yakovsirotkin.machamp
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
@@ -13,7 +14,8 @@ import java.sql.Statement
  * Database layer
  */
 @Component
-class AsyncTaskDao @Autowired constructor(
+@Qualifier
+open class AsyncTaskDao @Autowired constructor(
     private val jdbcTemplate: JdbcTemplate,
     private val objectMapper: ObjectMapper,
     @Value("\${machamp.priority.enabled:true}")
@@ -33,7 +35,7 @@ class AsyncTaskDao @Autowired constructor(
      * @param delayInSeconds delay before first attempt in seconds
      * @return taskId in database
      */
-    fun createTask(
+    open fun createTask(
         taskType: String, description: String,
         priority: Int = priorityDefaultValue, delayInSeconds: Int = 0
     ): Long {
@@ -59,7 +61,7 @@ class AsyncTaskDao @Autowired constructor(
      * Takes one task with `process_time` in the past from database and moves its `process_time` to the future.
      * @return one [AsyncTask] or null
      */
-    fun getTask(): AsyncTask? {
+    open fun getTask(): AsyncTask? {
         var response: AsyncTask? = null
         jdbcTemplate.query(
             "UPDATE async_task " +
@@ -73,8 +75,11 @@ class AsyncTaskDao @Autowired constructor(
                         ""
                     } +
                     " LIMIT 1 FOR UPDATE SKIP LOCKED)" +
-                    " RETURNING task_id, task_type, description",
-            { rs, i -> response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3))) })
+                    " RETURNING task_id, task_type, description"
+        ) {
+            rs, i ->
+            response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3)))
+        }
         return response
     }
 
@@ -83,7 +88,7 @@ class AsyncTaskDao @Autowired constructor(
      * @param taskId taskId in database
      * @return number of deleted tasks
      */
-    fun deleteTask(taskId: Long): Int {
+    open fun deleteTask(taskId: Long): Int {
         return jdbcTemplate.update("DELETE FROM async_task WHERE task_id = ?", taskId)
     }
 
@@ -96,7 +101,7 @@ class AsyncTaskDao @Autowired constructor(
      * @param priority only tasks with priority greater or equal will be removed
      * @return number of delete rows
      */
-    fun deleteDuplicateTask(
+    open fun deleteDuplicateTask(
         lastTaskId: Long,
         taskType: String,
         property: String,
@@ -115,7 +120,7 @@ class AsyncTaskDao @Autowired constructor(
         return deleted
     }
 
-    fun tasks(limit: Int): List<AsyncTaskDto> {
+    open fun tasks(limit: Int): List<AsyncTaskDto> {
         return jdbcTemplate.query(
             "SELECT task_id, task_type, description, attempt, process_time, taken FROM async_task LIMIT ?",
             { rs, i ->
@@ -129,7 +134,7 @@ class AsyncTaskDao @Autowired constructor(
         )
     }
 
-    fun processNow(taskId: Long, expectedAttempt: Int): Int {
+    open fun processNow(taskId: Long, expectedAttempt: Int): Int {
         return jdbcTemplate.update(
             "UPDATE async_task SET process_time = NOW() WHERE task_id = ? and attempt = ?", taskId, expectedAttempt
         )

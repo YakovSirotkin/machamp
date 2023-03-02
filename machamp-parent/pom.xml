@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.yakovsirotkin</groupId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
     <artifactId>machamp-parent</artifactId>
     <packaging>pom</packaging>
     <name>machamp-parent</name>
@@ -36,9 +36,9 @@
     <developers>
         <developer>
             <name>Yakov Sirotkin</name>
-            <email>yasha@telamon.ru</email>
+            <email>yakov.sirotkin@gmail.com</email>
             <organization>person</organization>
-            <organizationUrl>http://www.telamon.ru</organizationUrl>
+            <organizationUrl>https://www.linkedin.com/in/yakovsirotkin/</organizationUrl>
         </developer>
     </developers>
 

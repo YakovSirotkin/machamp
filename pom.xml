@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>machamp</artifactId>
-    <version>0.0.12</version>
+    <version>0.0.13</version>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>io.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
-        <version>0.0.12</version>
+        <version>0.0.13</version>
         <relativePath>./machamp-parent</relativePath>
     </parent>
 
@@ -27,9 +27,9 @@
     <developers>
         <developer>
             <name>Yakov Sirotkin</name>
-            <email>yasha@telamon.ru</email>
+            <email>yakov.sirotkin@gmail.com</email>
             <organization>person</organization>
-            <organizationUrl>http://www.telamon.ru</organizationUrl>
+            <organizationUrl>https://www.linkedin.com/in/yakovsirotkin/</organizationUrl>
         </developer>
     </developers>
 
@@ -50,6 +50,7 @@
     <modules>
         <module>machamp-parent</module>
         <module>machamp-core</module>
+        <module>machamp-sqlserver</module>
         <module>machamp-spring-boot-starter</module>
     </modules>
 </project>
