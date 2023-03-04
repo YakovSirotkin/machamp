@@ -1,4 +1,4 @@
-package io.github.yakovsirotkin.machamp.springboot
+package io.github.yakovsirotkin.machamp.sqlserver.springboot
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcTemplate
 import io.github.yakovsirotkin.machamp.AsyncTaskDao
+import io.github.yakovsirotkin.machamp.springboot.MachampProperties
+import io.github.yakovsirotkin.machamp.sqlserver.SqlServerAsyncTaskDao
 
 
 /**
@@ -16,16 +18,16 @@ import io.github.yakovsirotkin.machamp.AsyncTaskDao
 @Configuration
 @EnableConfigurationProperties(MachampProperties::class)
 @ConditionalOnClass(AsyncTaskDao::class)
-open class AsyncTaskDaoAutoConfiguration {
+open class SqlServerAsyncTaskDaoAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(AsyncTaskDao::class)
+    @ConditionalOnMissingBean(SqlServerAsyncTaskDaoAutoConfiguration::class)
     open fun asyncTaskDao(
         jdbcTemplate: JdbcTemplate,
         objectMapper: ObjectMapper,
         machampProperties: MachampProperties
-    ): AsyncTaskDao {
-        return AsyncTaskDao(jdbcTemplate, objectMapper,
+    ): SqlServerAsyncTaskDao {
+        return SqlServerAsyncTaskDao(jdbcTemplate, objectMapper,
             machampProperties.priority.enabled,
             machampProperties.priority.defaultValue,
             machampProperties.taskTable,

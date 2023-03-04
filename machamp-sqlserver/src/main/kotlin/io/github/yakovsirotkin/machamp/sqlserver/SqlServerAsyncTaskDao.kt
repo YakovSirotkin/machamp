@@ -22,8 +22,10 @@ class SqlServerAsyncTaskDao @Autowired constructor(
     @Value("\${machamp.priority.enabled:true}")
     private val priorityEnabled: Boolean,
     @Value("\${machamp.priority.defaultValue:100}")
-    private val priorityDefaultValue: Int
-) : AsyncTaskDao(jdbcTemplate, objectMapper, priorityEnabled, priorityDefaultValue) {
+    private val priorityDefaultValue: Int,
+    @Value("\${machamp.taskTable:async_task}")
+    private val taskTable: String,
+) : AsyncTaskDao(jdbcTemplate, objectMapper, priorityEnabled, priorityDefaultValue, taskTable) {
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
     }
@@ -36,7 +38,7 @@ class SqlServerAsyncTaskDao @Autowired constructor(
         val generatedKeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({
             val ps = it.prepareStatement(
-                "INSERT INTO async_task (task_type, description, priority, process_time) " +
+                "INSERT INTO $taskTable (task_type, description, priority, process_time) " +
                         " VALUES (?, ?, ?,  DATEADD(ss, ?, GETDATE()))",
                 Statement.RETURN_GENERATED_KEYS
             )
@@ -57,7 +59,7 @@ class SqlServerAsyncTaskDao @Autowired constructor(
             ";with cte as (" +
                     "SELECT TOP(1) " +
                     " task_id, task_type, description, process_time, attempt, taken  " +
-                    " FROM async_task " +
+                    " FROM $taskTable " +
                     " WHERE process_time < GETUTCDATE() " +
                     if (priorityEnabled) {
                         " ORDER BY priority ASC "
@@ -83,7 +85,7 @@ class SqlServerAsyncTaskDao @Autowired constructor(
         priority: Int
     ): Int {
         val deleted = jdbcTemplate.update(
-            "DELETE FROM async_task WHERE " +
+            "DELETE FROM $taskTable WHERE " +
                     " task_id < ? AND task_type = ? AND CAST(JSON_VALUE(description, ?) AS INT) = ? " +
                     " AND priority >= ?",
             lastTaskId, taskType, "$.$property", value, priority
@@ -96,7 +98,7 @@ class SqlServerAsyncTaskDao @Autowired constructor(
 
     override fun tasks(limit: Int): List<AsyncTaskDto> {
         return jdbcTemplate.query(
-            "SELECT TOP $limit task_id, task_type, description, attempt, process_time, taken FROM async_task " +
+            "SELECT TOP $limit task_id, task_type, description, attempt, process_time, taken FROM $taskTable " +
                     " ORDER BY task_id"
         ) { rs, i ->
             AsyncTaskDto(
@@ -109,7 +111,7 @@ class SqlServerAsyncTaskDao @Autowired constructor(
 
     override fun processNow(taskId: Long, expectedAttempt: Int): Int {
         return jdbcTemplate.update(
-            "UPDATE async_task SET process_time = GETUTCDATE() WHERE task_id = ? and attempt = ?", taskId, expectedAttempt
+            "UPDATE $taskTable SET process_time = GETUTCDATE() WHERE task_id = ? and attempt = ?", taskId, expectedAttempt
         )
     }
 }

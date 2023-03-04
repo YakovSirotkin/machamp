@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Component
 import java.sql.Statement
+import javax.annotation.PostConstruct
 
 /**
  * Database layer
@@ -21,10 +22,25 @@ open class AsyncTaskDao @Autowired constructor(
     @Value("\${machamp.priority.enabled:true}")
     private val priorityEnabled: Boolean,
     @Value("\${machamp.priority.defaultValue:100}")
-    private val priorityDefaultValue: Int
+    private val priorityDefaultValue: Int,
+    @Value("\${machamp.taskTable:async_task}")
+    private val taskTable: String,
 ) {
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
+    }
+
+    @PostConstruct
+    fun checkTableNameToPreventPossibleAttacks() {
+        if (taskTable.length > 50) {
+            throw Exception("Task table name $taskTable has more than 50 symbols")
+        }
+        " \t\r\n,;".forEach {
+            if (taskTable.contains(it)) {
+                throw Exception("Task table name $taskTable contains symbol $it (code ${it.code})")
+            }
+        }
+        logger.info("Setting async_task table name to $taskTable")
     }
 
     /**
@@ -42,7 +58,7 @@ open class AsyncTaskDao @Autowired constructor(
         val generatedKeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({
             val ps = it.prepareStatement(
-                "INSERT INTO async_task (task_type, description, priority, process_time) " +
+                "INSERT INTO $taskTable (task_type, description, priority, process_time) " +
                         " VALUES (?, ?::json, ?, NOW() + ? * interval '1 second' )",
                 Statement.RETURN_GENERATED_KEYS
             )
@@ -64,11 +80,11 @@ open class AsyncTaskDao @Autowired constructor(
     open fun getTask(): AsyncTask? {
         var response: AsyncTask? = null
         jdbcTemplate.query(
-            "UPDATE async_task " +
+            "UPDATE $taskTable " +
                     " SET process_time = NOW() + power(2, LEAST(14, attempt)) * interval '1 minute', " +
                     " attempt = LEAST(30000, attempt + 1), " +
                     " taken = NOW() WHERE task_id = " +
-                    " (SELECT task_id FROM async_task WHERE process_time < NOW()" +
+                    " (SELECT task_id FROM $taskTable WHERE process_time < NOW()" +
                     if (priorityEnabled) {
                         " ORDER BY priority ASC "
                     } else {
@@ -89,7 +105,7 @@ open class AsyncTaskDao @Autowired constructor(
      * @return number of deleted tasks
      */
     open fun deleteTask(taskId: Long): Int {
-        return jdbcTemplate.update("DELETE FROM async_task WHERE task_id = ?", taskId)
+        return jdbcTemplate.update("DELETE FROM $taskTable WHERE task_id = ?", taskId)
     }
 
     /**
@@ -109,7 +125,7 @@ open class AsyncTaskDao @Autowired constructor(
         priority: Int = priorityDefaultValue
     ): Int {
         val deleted = jdbcTemplate.update(
-            "DELETE FROM async_task WHERE " +
+            "DELETE FROM $taskTable WHERE " +
                     " task_id < ? AND task_type = ? AND CAST(description ->> ? AS BIGINT) = ? " +
                     " AND priority >= ?",
             lastTaskId, taskType, property, value, priority
@@ -122,7 +138,7 @@ open class AsyncTaskDao @Autowired constructor(
 
     open fun tasks(limit: Int): List<AsyncTaskDto> {
         return jdbcTemplate.query(
-            "SELECT task_id, task_type, description, attempt, process_time, taken FROM async_task LIMIT ?",
+            "SELECT task_id, task_type, description, attempt, process_time, taken FROM $taskTable LIMIT ?",
             { rs, i ->
                 AsyncTaskDto(
                     rs.getLong(1), rs.getString(2),
@@ -136,7 +152,7 @@ open class AsyncTaskDao @Autowired constructor(
 
     open fun processNow(taskId: Long, expectedAttempt: Int): Int {
         return jdbcTemplate.update(
-            "UPDATE async_task SET process_time = NOW() WHERE task_id = ? and attempt = ?", taskId, expectedAttempt
+            "UPDATE $taskTable SET process_time = NOW() WHERE task_id = ? and attempt = ?", taskId, expectedAttempt
         )
     }
 }

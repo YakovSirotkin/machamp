@@ -52,5 +52,6 @@
         <module>machamp-core</module>
         <module>machamp-sqlserver</module>
         <module>machamp-spring-boot-starter</module>
+        <module>machamp-sqlserver-spring-boot-starter</module>
     </modules>
 </project>
