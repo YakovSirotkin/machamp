@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcTemplate
-import io.github.yakovsirotkin.machamp.AsyncTaskDao
 import io.github.yakovsirotkin.machamp.springboot.MachampProperties
 import io.github.yakovsirotkin.machamp.sqlserver.SqlServerAsyncTaskDao
 
@@ -17,7 +16,7 @@ import io.github.yakovsirotkin.machamp.sqlserver.SqlServerAsyncTaskDao
  */
 @Configuration
 @EnableConfigurationProperties(MachampProperties::class)
-@ConditionalOnClass(AsyncTaskDao::class)
+@ConditionalOnClass(SqlServerAsyncTaskDao::class)
 open class SqlServerAsyncTaskDaoAutoConfiguration {
 
     @Bean

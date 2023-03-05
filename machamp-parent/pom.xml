@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.yakovsirotkin</groupId>
-    <version>0.0.13</version>
+    <version>0.0.14</version>
     <artifactId>machamp-parent</artifactId>
     <packaging>pom</packaging>
     <name>machamp-parent</name>
@@ -54,13 +54,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <kotlin.version>1.6.21</kotlin.version>
-        <kotlin-coroutines.version>1.6.0</kotlin-coroutines.version>
+        <kotlin.version>1.8.10</kotlin.version>
+        <kotlin-coroutines.version>1.6.4</kotlin-coroutines.version>
         <testcontainers.version>1.16.2</testcontainers.version>
-        <postgresql.version>42.3.5</postgresql.version>
+        <postgresql.version>42.5.4</postgresql.version>
         <springboot.version>2.6.7</springboot.version>
         <swagger-annotations.version>2.2.0</swagger-annotations.version>
-        <jackson.version>2.13.3</jackson.version>
+        <jackson.version>2.14.2</jackson.version>
         <junit-jupiter.version>5.7.0</junit-jupiter.version>
         <dokka.version>1.6.10</dokka.version>
     </properties>
