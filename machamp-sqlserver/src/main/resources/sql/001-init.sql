@@ -5,7 +5,7 @@ CREATE TABLE async_task
     description  NVARCHAR(max),
     attempt      SMALLINT    NOT NULL DEFAULT 0,
     priority     INTEGER     NOT NULL DEFAULT 100,
-    process_time DATETIMEOFFSET NOT NULL DEFAULT GETDATE(),
-    created      DATETIMEOFFSET NOT NULL DEFAULT GETDATE(),
+    process_time DATETIMEOFFSET NOT NULL DEFAULT GETUTCDATE(),
+    created      DATETIMEOFFSET NOT NULL DEFAULT GETUTCDATE(),
     taken        DATETIMEOFFSET          DEFAULT NULL
 );

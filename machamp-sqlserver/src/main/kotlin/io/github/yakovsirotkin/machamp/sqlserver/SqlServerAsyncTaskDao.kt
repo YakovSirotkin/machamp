@@ -39,7 +39,7 @@ class SqlServerAsyncTaskDao @Autowired constructor(
         jdbcTemplate.update({
             val ps = it.prepareStatement(
                 "INSERT INTO $taskTable (task_type, description, priority, process_time) " +
-                        " VALUES (?, ?, ?,  DATEADD(ss, ?, GETDATE()))",
+                        " VALUES (?, ?, ?,  DATEADD(ss, ?, GETUTCDATE()))",
                 Statement.RETURN_GENERATED_KEYS
             )
             ps.setString(1, taskType)
