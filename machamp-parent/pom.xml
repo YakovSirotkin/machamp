@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.yakovsirotkin</groupId>
-    <version>0.0.16</version>
+    <version>0.0.17</version>
     <artifactId>machamp-parent</artifactId>
     <packaging>pom</packaging>
     <name>machamp-parent</name>
@@ -58,7 +58,7 @@
         <kotlin-coroutines.version>1.6.4</kotlin-coroutines.version>
         <testcontainers.version>1.16.2</testcontainers.version>
         <postgresql.version>42.5.4</postgresql.version>
-        <springboot.version>2.6.7</springboot.version>
+        <springboot.version>2.6.14</springboot.version>
         <swagger-annotations.version>2.2.0</swagger-annotations.version>
         <jackson.version>2.14.2</jackson.version>
         <junit-jupiter.version>5.7.0</junit-jupiter.version>

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcTemplate
 import io.github.yakovsirotkin.machamp.AsyncTaskDao
+import org.springframework.beans.factory.annotation.Qualifier
 
 
 /**
@@ -19,6 +20,7 @@ import io.github.yakovsirotkin.machamp.AsyncTaskDao
 open class AsyncTaskDaoAutoConfiguration {
 
     @Bean
+    @Qualifier
     @ConditionalOnMissingBean(AsyncTaskDao::class)
     open fun asyncTaskDao(
         jdbcTemplate: JdbcTemplate,

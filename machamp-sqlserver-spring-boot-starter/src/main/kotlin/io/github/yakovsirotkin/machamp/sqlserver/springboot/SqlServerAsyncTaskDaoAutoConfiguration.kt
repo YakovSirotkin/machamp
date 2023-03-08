@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcTemplate
 import io.github.yakovsirotkin.machamp.springboot.MachampProperties
 import io.github.yakovsirotkin.machamp.sqlserver.SqlServerAsyncTaskDao
+import org.springframework.context.annotation.Primary
 
 
 /**
@@ -20,7 +21,8 @@ import io.github.yakovsirotkin.machamp.sqlserver.SqlServerAsyncTaskDao
 open class SqlServerAsyncTaskDaoAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(SqlServerAsyncTaskDaoAutoConfiguration::class)
+    @Primary
+    @ConditionalOnMissingBean(SqlServerAsyncTaskDao::class)
     open fun asyncTaskDao(
         jdbcTemplate: JdbcTemplate,
         objectMapper: ObjectMapper,
