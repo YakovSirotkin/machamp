@@ -23,7 +23,7 @@ open class SqlServerAsyncTaskDaoAutoConfiguration {
     @Bean
     @Primary
     @ConditionalOnMissingBean(SqlServerAsyncTaskDao::class)
-    open fun asyncTaskDao(
+    open fun sqlServerAsyncTaskDao(
         jdbcTemplate: JdbcTemplate,
         objectMapper: ObjectMapper,
         machampProperties: MachampProperties

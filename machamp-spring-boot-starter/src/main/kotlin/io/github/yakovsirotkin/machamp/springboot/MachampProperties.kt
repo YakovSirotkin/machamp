@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class MachampProperties {
     val processor = Processor()
     val priority = Priority()
-    val taskTable = "async_task"
+    var taskTable = "async_task"
 
     class Processor {
        var threads: Int = 10
