@@ -63,7 +63,7 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.18'
 ```
 
 ## Database table creation
-[src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-core/src/main/resources/sql/001-init.sql)
+[machamp-core/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-core/src/main/resources/sql/001-init.sql)
 ```
 CREATE TABLE async_task
 (
@@ -174,4 +174,30 @@ In case of `spring.main.lazy-initialization=true` you should initialize bean tha
 | machamp.priority.enabled      | `true`        | Load tasks with less priority values first if `true` or ignore priority otherwise. |
 | machamp.priority.defaultValue | `100`         | Default priority value for async tasks.                                            |
 | machamp.adminEnabled          | `false`       | Allows to enable admin interface at /machamp/admin/                                |
- 
+| machamp.taskTable             | `async_task`  | Allows to set the name for the database table with machamp tasks                   |
+
+#Other databases support
+
+##SQL Server
+
+To use machamp with SQL Server you need to use `machamp-sqlserver-spring-boot-starter` package instead of
+`machamp-spring-boot-starter`.
+
+To create database table you need to apply script 
+
+[machamp-sqlserver/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-sqlserver/src/main/resources/sql/001-init.sql)
+
+```
+CREATE TABLE async_task
+(
+    task_id      BIGINT IDENTITY(1,1) PRIMARY KEY,
+    task_type    VARCHAR(255),
+    description  NVARCHAR(max),
+    attempt      SMALLINT    NOT NULL DEFAULT 0,
+    priority     INTEGER     NOT NULL DEFAULT 100,
+    process_time DATETIMEOFFSET NOT NULL DEFAULT GETUTCDATE(),
+    created      DATETIMEOFFSET NOT NULL DEFAULT GETUTCDATE(),
+    taken        DATETIMEOFFSET          DEFAULT NULL
+);
+```
+
