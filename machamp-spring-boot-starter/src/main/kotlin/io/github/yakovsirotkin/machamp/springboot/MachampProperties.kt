@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * Machamp configuration properties
  */
 @ConfigurationProperties(prefix = "machamp")
-class MachampProperties {
+open class MachampProperties {
     val processor = Processor()
     val priority = Priority()
     var taskTable = "async_task"

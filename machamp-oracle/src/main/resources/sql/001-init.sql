@@ -1,0 +1,13 @@
+CREATE TABLE async_task
+(
+    task_id      NUMBER(38) PRIMARY KEY,
+    task_type    VARCHAR2(255),
+    description  CLOB,
+    attempt      NUMBER(38) DEFAULT 0   NOT NULL,
+    priority     NUMBER(38) DEFAULT 100 NOT NULL,
+    process_time TIMESTAMP WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL,
+    created      TIMESTAMP WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL,
+    taken        TIMESTAMP WITH TIME ZONE DEFAULT NULL
+);
+
+CREATE SEQUENCE async_task_seq START WITH 1;

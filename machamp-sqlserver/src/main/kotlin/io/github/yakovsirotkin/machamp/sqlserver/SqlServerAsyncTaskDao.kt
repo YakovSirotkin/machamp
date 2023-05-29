@@ -58,7 +58,7 @@ class SqlServerAsyncTaskDao @Autowired constructor(
         jdbcTemplate.query(
             ";with cte as (" +
                     "SELECT TOP(1) " +
-                    " task_id, task_type, description, process_time, attempt, taken  " +
+                    " task_id, task_type, description, process_time, attempt, priority, taken  " +
                     " FROM $taskTable " +
                     " WHERE process_time < GETUTCDATE() " +
                     if (priorityEnabled) {
@@ -71,9 +71,10 @@ class SqlServerAsyncTaskDao @Autowired constructor(
                     " attempt = CASE WHEN 30000 < attempt THEN 30000 ELSE attempt + 1 END, " +
                     " taken = GETUTCDATE() " +
                     " OUTPUT " +
-                    " DELETED.task_id, DELETED.task_type, DELETED.description",
+                    " DELETED.task_id, DELETED.task_type, DELETED.description, DELETED.attempt, DELETED.priority",
             { rs, i ->
-                response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3)))
+                response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3)),
+                    rs.getInt(4), rs.getInt(5))
             })
         return response
     }

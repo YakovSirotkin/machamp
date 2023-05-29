@@ -194,3 +194,33 @@ CREATE TABLE async_task
 );
 ```
 
+##Oracle
+
+To use machamp with Oracle you need to use `machamp-oracle-spring-boot-starter` package instead of
+`machamp-spring-boot-starter`. Machamp supports Oracle starting version 12c.
+
+To create database table you need to apply script
+
+[machamp-oracle/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-oracle/src/main/resources/sql/001-init.sql)
+
+```
+CREATE TABLE async_task
+(
+    task_id      NUMBER(38) PRIMARY KEY,
+    task_type    VARCHAR2(255),
+    description  CLOB,
+    attempt      NUMBER(38) DEFAULT 0   NOT NULL,
+    priority     NUMBER(38) DEFAULT 100 NOT NULL,
+    process_time TIMESTAMP WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL,
+    created      TIMESTAMP WITH TIME ZONE DEFAULT SYSTIMESTAMP NOT NULL,
+    taken        TIMESTAMP WITH TIME ZONE DEFAULT NULL
+);
+
+CREATE SEQUENCE async_task_seq START WITH 1;
+```
+### Oracle additional configuration parameters
+
+| Option                        | default value    | description                                                                        |
+|-------------------------------|------------------|------------------------------------------------------------------------------------|
+| machamp.taskSequence          | `async_task_seq` | Allows to set the name for the sequence for the machamp tasks ids                  |
+

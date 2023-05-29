@@ -8,5 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode
 data class  AsyncTask(
     val taskId: Long,
     val taskType: String,
-    val description: JsonNode
+    val description: JsonNode,
+    val attempt: Int,
+    val priority: Int,
 )

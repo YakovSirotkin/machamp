@@ -1,4 +1,4 @@
-package io.github.yakovsirotkin.machamp.sqlserver
+package io.github.yakovsirotkin.machamp.oracle
 
 import io.github.yakovsirotkin.machamp.AdminController
 import io.github.yakovsirotkin.machamp.AsyncTaskHandler
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 open class TestConfiguration @Autowired constructor(
-    private val asyncTaskDao: SqlServerAsyncTaskDao,
+    private val asyncTaskDao: OracleAsyncTaskDao,
     private val taskHandlers: List<AsyncTaskHandler>
 ){
     @Bean

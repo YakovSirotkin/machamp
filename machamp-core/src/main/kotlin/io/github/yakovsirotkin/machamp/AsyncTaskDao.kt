@@ -59,7 +59,7 @@ open class AsyncTaskDao @Autowired constructor(
         jdbcTemplate.update({
             val ps = it.prepareStatement(
                 "INSERT INTO $taskTable (task_type, description, priority, process_time) " +
-                        " VALUES (?, ?::json, ?, NOW() + ? * interval '1 second' )",
+                        " VALUES (?, ?::json, ?, NOW() + ? * INTERVAL '1' SECOND )",
                 Statement.RETURN_GENERATED_KEYS
             )
             ps.setString(1, taskType)
@@ -91,10 +91,11 @@ open class AsyncTaskDao @Autowired constructor(
                         ""
                     } +
                     " LIMIT 1 FOR UPDATE SKIP LOCKED)" +
-                    " RETURNING task_id, task_type, description"
+                    " RETURNING task_id, task_type, description, attempt, priority "
         ) {
-            rs, i ->
-            response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3)))
+                rs, _ ->
+            response = AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3)),
+                    rs.getInt(4), rs.getInt(5))
         }
         return response
     }
@@ -139,7 +140,7 @@ open class AsyncTaskDao @Autowired constructor(
     open fun tasks(limit: Int): List<AsyncTaskDto> {
         return jdbcTemplate.query(
             "SELECT task_id, task_type, description, attempt, process_time, taken FROM $taskTable LIMIT ?",
-            { rs, i ->
+            { rs, _ ->
                 AsyncTaskDto(
                     rs.getLong(1), rs.getString(2),
                     rs.getString(3),

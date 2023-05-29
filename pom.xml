@@ -51,7 +51,9 @@
         <module>machamp-parent</module>
         <module>machamp-core</module>
         <module>machamp-sqlserver</module>
+        <module>machamp-oracle</module>
         <module>machamp-spring-boot-starter</module>
         <module>machamp-sqlserver-spring-boot-starter</module>
+        <module>machamp-oracle-spring-boot-starter</module>
     </modules>
 </project>
