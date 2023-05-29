@@ -49,7 +49,11 @@ class AsyncTaskProcessor(
                 GlobalScope.launch {
                     logger.info("Starting task processor coroutine $i")
                     while (continueProcessing) {
-                        processingCore(i)
+                        try {
+                            processingCore(i)
+                        } catch (e: Exception) {
+                            logger.error("Error in coroutine processor $i", e)
+                        }
                         delay(1000)
                     }
                     logger.info("Job processor coroutine $i will not process more tasks!")
