@@ -37,7 +37,7 @@ class AsyncTaskProcessor(
 
     @PostConstruct
     fun init() {
-        logger.info("Starting async task listener")
+        logger.info("Starting async task processor with $threadsCount threads")
 
         taskHandlers.forEach {
             taskHandlersMap[it.getType()] = it

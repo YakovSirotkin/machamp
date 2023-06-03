@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
-        <version>0.0.18</version>
+        <version>0.0.19</version>
         <relativePath>../machamp-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -175,7 +175,7 @@
         <dependency>
             <groupId>io.github.yakovsirotkin</groupId>
             <artifactId>machamp-core</artifactId>
-            <version>0.0.18</version>
+            <version>0.0.19</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.postgresql</groupId>
