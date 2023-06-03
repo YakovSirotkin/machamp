@@ -31,7 +31,6 @@ class PriorityTest @Autowired constructor(
     BaseTest(jdbcTemplate) {
 
     @Test
-    //TODO This test fails sometimes
     fun priorityTest() {
         val n = 30
         transactionTemplate.execute {
