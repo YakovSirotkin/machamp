@@ -55,5 +55,8 @@
         <module>machamp-spring-boot-starter</module>
         <module>machamp-sqlserver-spring-boot-starter</module>
         <module>machamp-oracle-spring-boot-starter</module>
+        <module>machamp-client-spring-boot-starter</module>
+        <module>machamp-client-sqlserver-spring-boot-starter</module>
+        <module>machamp-client-oracle-spring-boot-starter</module>
     </modules>
 </project>
