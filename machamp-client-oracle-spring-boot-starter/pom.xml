@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
-        <version>0.0.20</version>
+        <version>0.0.22</version>
         <relativePath>../machamp-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -186,7 +186,7 @@
         <dependency>
             <groupId>io.github.yakovsirotkin</groupId>
             <artifactId>machamp-oracle</artifactId>
-            <version>0.0.20</version>
+            <version>0.0.22</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
