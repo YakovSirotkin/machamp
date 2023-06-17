@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
-        <version>0.0.22</version>
+        <version>0.0.23</version>
         <relativePath>../machamp-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
