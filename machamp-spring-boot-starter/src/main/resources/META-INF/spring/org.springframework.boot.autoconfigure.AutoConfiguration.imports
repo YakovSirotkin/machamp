@@ -1,0 +1,4 @@
+io.github.yakovsirotkin.machamp.springboot.AsyncTaskDaoAutoConfiguration
+io.github.yakovsirotkin.machamp.springboot.AsyncTaskProcessorAutoConfiguration
+io.github.yakovsirotkin.machamp.springboot.AdminControllerAutoConfiguration
+
