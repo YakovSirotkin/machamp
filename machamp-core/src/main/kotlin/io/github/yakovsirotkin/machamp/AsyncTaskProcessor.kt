@@ -8,12 +8,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.DisposableBean
+import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Value
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 
 /**
  * Core class that takes tasks from database and process it with [AsyncTaskHandler] implementations.
@@ -26,7 +26,7 @@ class AsyncTaskProcessor(
     @Value("\${machamp.processor.useCoroutines:false}")
     private val useCoroutines: Boolean,
     private val taskHandlers: List<AsyncTaskHandler>
-) {
+): InitializingBean, DisposableBean {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     private lateinit var jobs: Array<Job>
@@ -35,8 +35,7 @@ class AsyncTaskProcessor(
 
     private var continueProcessing: Boolean = true
 
-    @PostConstruct
-    fun init() {
+    override fun afterPropertiesSet() {
         logger.info("Starting async task processor with $threadsCount threads")
 
         taskHandlers.forEach {
@@ -127,8 +126,7 @@ class AsyncTaskProcessor(
         }
     }
 
-    @PreDestroy
-    fun onDestroy() {
+    override fun destroy() {
         continueProcessing = false
         logger.info("Shutting down task processing")
         if (useCoroutines) {
