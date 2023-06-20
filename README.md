@@ -2,7 +2,7 @@
 
 
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.22-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.0.24-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/yakovsirotkin/machamp/blob/master/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
   </a>
@@ -33,10 +33,10 @@ This solution is relevant to many situations when we need to call an external sy
 
 ```gradle
 //gradle kotlin DSL
-implementation("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.22")
+implementation("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.24")
 
 //gradle groovy DSL
-implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.22'
+implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.24'
 ```
 
 ### Maven
@@ -45,14 +45,14 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.22'
 <dependency>
   <groupId>io.github.yakovsirotkin</groupId>
   <artifactId>machamp-spring-boot-starter</artifactId>
-  <version>0.0.22</version>
+  <version>0.0.24</version>
 </dependency>
 ```
 
 [kscript](https://github.com/holgerbrandl/kscript)
 
 ```kotlin
-@file:DependsOn("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.22")
+@file:DependsOn("io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.24")
 ```
 
 ## Database table creation
