@@ -70,6 +70,27 @@ CREATE TABLE async_task
     taken        TIMESTAMPTZ          DEFAULT NULL
 );
 ```
+## Spring Boot 3 compatibility and Java 17 requirements
+This project compiled with Java 11 using libraries from Spring Boot 2.6.14. It works fine under Spring Boot 3,
+but for Swagger admin interface it has dependency from `org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0`. 
+Unfortunately, this library compiled under Java 17 (Spring Boot 3 also requires Java 17) and prevents application
+from starting on previous Java version. To avoid this problem you need to exclude this dependency with code like this 
+for Maven:
+
+```maven
+<dependency>
+  <groupId>io.github.yakovsirotkin</groupId>
+  <artifactId>machamp-spring-boot-starter</artifactId>
+  <version>0.0.24</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
 ## Task Definition
 
 ### Kotlin
