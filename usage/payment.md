@@ -150,5 +150,5 @@ class CallbackController @Autowired constructor(
 }
 ```
 
-That's all! Please send you feedback to [yakov.sirotkin@gmail.com](yakov.sirotkin@gmail.com).    
+That's all! Please send you feedback to yakov.sirotkin@gmail.com.    
 
