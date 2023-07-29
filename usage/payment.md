@@ -1,4 +1,4 @@
-# Outgoing payment
+# Outgoing payments
 
 Imagine that your need to send money to people around the globe. It's clear that you need to
 use some payment provider that knows how to work with banks in different countries and can handle sensitive users' data.

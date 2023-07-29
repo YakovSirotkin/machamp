@@ -14,7 +14,8 @@ Let's assume that an application needs to email the user, but the SMTP host is u
 about the outgoing email somewhere and process it later. However, this will require some additional code that saves-loads emails, and it is not likely to be used every year, so there is a high chance that it will be broken when it is needed.
 Alternatively, we can simply save an outgoing email to the database all the time and automatically process it with a standard workflow to solve this issue. 
 
-Machamp provides implementation for the standard workflow mentioned above. It has several threads (implemented as coroutines). Each thread loads tasks one by one, if there are no tasks, it pauses for 1 second. If the system is lazy and has 10 threads, the expected delay for processing a new task will be about 0.1 second. Also, we have limited potential load on the external server, proportional to the number of threads.
+Machamp provides implementation for the standard workflow mentioned above. It has several threads, each thread loads tasks 
+one by one, if there are no tasks, it pauses for 1 second. If the system is lazy and has 10 threads, the expected delay for processing a new task will be about 0.1 second. Also, we have limited potential load on the external server, proportional to the number of threads.
 
 
 Another important aspect is that if the task fails, its processing is delayed by 1 minute. After the 2nd failed attempt delay will be increased to 2 minutes, the 3rd - 4 minutes and so on using the powers of 2. Hence, if we receive a huge set of broken tasks, it will affect the overall performance, but the impact will be limited and the system will be back to normal automatically.
@@ -22,8 +23,13 @@ More than that, if we deploy a fix in 2 days, all the tasks will be processed in
 
 This solution is relevant to many situations when we need to call an external system, including almost all payment systems.  
 
+[Short article in Russian](http://telamon.ru/articles/async.html)
 
-<a href="http://telamon.ru/articles/async.html">Short article in Russian</a>
+# Use cases
+
+[Outgoing payments](usage/payment.md)
+
+[Reporting](usage/reporting.md)
 
 # Usage
 
@@ -57,7 +63,7 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.25'
 
 ## Database table creation
 [machamp-core/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-core/src/main/resources/sql/001-init.sql)
-```
+```postgresql
 CREATE TABLE async_task
 (
     task_id      BIGSERIAL PRIMARY KEY,
@@ -94,15 +100,18 @@ for Maven:
 ## Task Definition
 
 ### Kotlin
-```
+```kotlin
 package io.github.yakovsirotkin.machamp
 
 import org.springframework.stereotype.Component
 
-public const val TASK_TYPE = "MY_TASK"
-
 @Component
 class MyAsyncTaskHandler : AsyncTaskHandler {
+
+    companion object {
+        const val TASK_TYPE = "my.task"
+    }
+    
     override fun getType(): String {
         return TASK_TYPE
     }
@@ -118,14 +127,14 @@ class MyAsyncTaskHandler : AsyncTaskHandler {
 ```
 
 ### Java
-```
+```java
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MyAsyncTaskHandler implements AsyncTaskHandler {
 
-    public static final String TASK_TYPE = "MY_TASK";
+    public static final String TASK_TYPE = "my.task";
 
     @Override
     public String getType() {
@@ -146,7 +155,7 @@ public class MyAsyncTaskHandler implements AsyncTaskHandler {
 ## Adding async task
 
 ### Kotlin
-```
+```kotlin
 import io.github.yakovsirotkin.machamp.AsyncTaskDao
 
 private val asyncTaskDao: AsyncTaskDao, //in bean constructor
@@ -162,7 +171,7 @@ private val asyncTaskDao: AsyncTaskDao, //in bean constructor
 
 ### Java
 
-```
+```java
 import io.github.yakovsirotkin.machamp.AsyncTaskDao;
 
     private AsyncTaskDao asyncTaskDao; //bean property
@@ -190,9 +199,9 @@ In case of `spring.main.lazy-initialization=true` you should initialize bean tha
 | machamp.adminEnabled          | `false`       | Allows to enable admin interface at /machamp/admin/                                |
 | machamp.taskTable             | `async_task`  | Allows to set the name for the database table with machamp tasks                   |
 
-#Other databases support
+# Other databases support
 
-##SQL Server
+## SQL Server
 
 To use machamp with SQL Server you need to use `machamp-sqlserver-spring-boot-starter` package instead of
 `machamp-spring-boot-starter`.
@@ -201,7 +210,7 @@ To create database table you need to apply script
 
 [machamp-sqlserver/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-sqlserver/src/main/resources/sql/001-init.sql)
 
-```
+```tsql
 CREATE TABLE async_task
 (
     task_id      BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -215,7 +224,7 @@ CREATE TABLE async_task
 );
 ```
 
-##Oracle
+## Oracle
 
 To use machamp with Oracle you need to use `machamp-oracle-spring-boot-starter` package instead of
 `machamp-spring-boot-starter`. Machamp supports Oracle starting version 12c.
@@ -224,7 +233,7 @@ To create database table you need to apply script
 
 [machamp-oracle/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-oracle/src/main/resources/sql/001-init.sql)
 
-```
+```oracle
 CREATE TABLE async_task
 (
     task_id      NUMBER(38) PRIMARY KEY,
