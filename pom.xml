@@ -52,11 +52,14 @@
         <module>machamp-core</module>
         <module>machamp-sqlserver</module>
         <module>machamp-oracle</module>
+        <module>machamp-mysql</module>
         <module>machamp-spring-boot-starter</module>
         <module>machamp-sqlserver-spring-boot-starter</module>
         <module>machamp-oracle-spring-boot-starter</module>
+        <module>machamp-mysql-spring-boot-starter</module>
         <module>machamp-client-spring-boot-starter</module>
         <module>machamp-client-sqlserver-spring-boot-starter</module>
         <module>machamp-client-oracle-spring-boot-starter</module>
+        <module>machamp-client-mysql-spring-boot-starter</module>
     </modules>
 </project>

@@ -8,7 +8,7 @@ import org.springframework.test.jdbc.JdbcTestUtils
 import org.testcontainers.containers.OracleContainer
 import org.testcontainers.junit.jupiter.Container
 
-open class BaseTest constructor(
+open class BaseTest(
     val jdbcTemplate: JdbcTemplate
 ) {
     companion object {

@@ -1,0 +1,11 @@
+CREATE TABLE async_task
+(
+    task_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    task_type VARCHAR(255) NOT NULL,
+    description  TEXT,
+    attempt      INT DEFAULT 0   NOT NULL,
+    priority     INT DEFAULT 100 NOT NULL,
+    process_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    taken        TIMESTAMP DEFAULT NULL
+);

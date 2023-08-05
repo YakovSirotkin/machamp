@@ -1,4 +1,4 @@
-package io.github.yakovsirotkin.machamp.sqlserver.springboot
+package io.github.yakovsirotkin.machamp.oracle.springboot
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.yakovsirotkin.machamp.oracle.OracleAsyncTaskDao

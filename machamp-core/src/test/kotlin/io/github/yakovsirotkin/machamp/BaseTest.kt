@@ -8,10 +8,10 @@ import org.springframework.test.jdbc.JdbcTestUtils
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Container
 
-open class BaseTest constructor(val jdbcTemplate: JdbcTemplate) {
+open class BaseTest(val jdbcTemplate: JdbcTemplate) {
     companion object {
         @Container
-        private val postgresDB: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:12")
+        private val postgresDB: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:12.15")
             .withDatabaseName("testdb")
             .withUsername("postgres")
             .withPassword("postgres")

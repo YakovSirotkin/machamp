@@ -1,4 +1,4 @@
-package io.github.yakovsirotkin.machamp.sqlserver.springboot
+package io.github.yakovsirotkin.machamp.oracle.springboot
 
 import io.github.yakovsirotkin.machamp.springboot.MachampProperties
 import org.springframework.boot.context.properties.ConfigurationProperties

@@ -11,9 +11,9 @@
         <relativePath>../machamp-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>machamp-oracle-spring-boot-starter</artifactId>
-    <name>machamp-oracle-spring-boot-starter</name>
-    <description>Machamp Oracle Spring Boot starter</description>
+    <artifactId>machamp-mysql-spring-boot-starter</artifactId>
+    <name>machamp-mysql-spring-boot-starter</name>
+    <description>Machamp MySQL Spring Boot starter</description>
 
     <properties>
         <modular-name>spring-boot-starter</modular-name>
@@ -219,7 +219,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.yakovsirotkin</groupId>
-            <artifactId>machamp-oracle</artifactId>
+            <artifactId>machamp-mysql</artifactId>
             <version>0.0.25</version>
             <scope>compile</scope>
         </dependency>

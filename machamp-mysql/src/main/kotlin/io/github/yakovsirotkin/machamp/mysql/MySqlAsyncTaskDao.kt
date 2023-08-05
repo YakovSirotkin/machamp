@@ -1,4 +1,4 @@
-package io.github.yakovsirotkin.machamp.oracle
+package io.github.yakovsirotkin.machamp.mysql
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.github.yakovsirotkin.machamp.AsyncTask
@@ -9,13 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Primary
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Component
+import java.math.BigInteger
 import java.sql.ResultSet
 import java.sql.Statement
 
 @Component
 @Primary
-class OracleAsyncTaskDao @Autowired constructor(
+class MySqlAsyncTaskDao @Autowired constructor(
     private val jdbcTemplate: JdbcTemplate,
     private val objectMapper: ObjectMapper,
     @Value("\${machamp.priority.enabled:true}")
@@ -24,8 +26,6 @@ class OracleAsyncTaskDao @Autowired constructor(
     private val priorityDefaultValue: Int,
     @Value("\${machamp.taskTable:async_task}")
     private val taskTable: String,
-    @Value("\${machamp.taskSequence:async_task_seq}")
-    private val taskSequence: String,
 ) : AsyncTaskDao(jdbcTemplate, objectMapper, priorityEnabled, priorityDefaultValue, taskTable) {
     companion object {
         private val logger = LoggerFactory.getLogger(this::class.java)
@@ -36,22 +36,20 @@ class OracleAsyncTaskDao @Autowired constructor(
         priority: Int,
         delayInSeconds: Int
     ): Long {
-        val taskId = jdbcTemplate.query("SELECT $taskSequence.nextval FROM DUAL") {
-            rs, _ -> rs.getLong(1)
-        }.first()
+        val generatedKeyHolder = GeneratedKeyHolder()
         jdbcTemplate.update({
             val ps = it.prepareStatement(
-                "INSERT INTO $taskTable (task_id, task_type, description, priority, process_time) " +
-                        " VALUES (?, ?, ?, ?,  SYSTIMESTAMP + INTERVAL '1' SECOND * ?)",
+                "INSERT INTO $taskTable (task_type, description, priority, process_time) " +
+                        " VALUES (?, ?, ?, DATE_ADD(CURRENT_TIMESTAMP , INTERVAL ? SECOND))",
                 Statement.RETURN_GENERATED_KEYS
             )
-            ps.setLong(1, taskId)
-            ps.setString(2, taskType)
-            ps.setString(3, description)
-            ps.setInt(4, priority)
-            ps.setInt(5, delayInSeconds)
+            ps.setString(1, taskType)
+            ps.setString(2, description)
+            ps.setInt(3, priority)
+            ps.setInt(4, delayInSeconds)
             ps
-        })
+        }, generatedKeyHolder)
+        val taskId = (generatedKeyHolder.keys!!["GENERATED_KEY"] as BigInteger).toLong()
         logger.info("Created task $taskId of type $taskType with description $description")
         return taskId
     }
@@ -65,8 +63,8 @@ class OracleAsyncTaskDao @Autowired constructor(
         val asyncTasks = jdbcTemplate.query(
             """SELECT task_id, task_type, description, attempt, priority 
                 FROM $taskTable
-                WHERE process_time <= SYSTIMESTAMP 
-                $orderClause FETCH NEXT ? ROWS ONLY""", { rs: ResultSet, i: Int ->
+                WHERE process_time <= CURRENT_TIMESTAMP 
+                $orderClause LIMIT ?""", { rs: ResultSet, i: Int ->
                 AsyncTask(rs.getLong(1), rs.getString(2), objectMapper.readTree(rs.getString(3)),
                     rs.getInt(4), rs.getInt(5))
 
@@ -86,9 +84,9 @@ class OracleAsyncTaskDao @Autowired constructor(
         topAsyncTask.forEach {
             val attempt = it.attempt
             val updatedRows = jdbcTemplate.update("""UPDATE $taskTable SET 
-            process_time = SYSTIMESTAMP + INTERVAL '1' MINUTE * POWER(2, LEAST(attempt, 14)),
+            process_time = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL POWER(2, LEAST(attempt, 14)) MINUTE),
             attempt = ?,
-            taken = SYSTIMESTAMP
+            taken = current_timestamp
             WHERE task_id = ? AND attempt = ?""",
             if (attempt < 30000) {
                 attempt + 1
@@ -128,8 +126,8 @@ class OracleAsyncTaskDao @Autowired constructor(
 
     override fun tasks(limit: Int): List<AsyncTaskDto> {
         return jdbcTemplate.query(
-            "SELECT task_id, task_type, description, attempt, process_time, taken FROM $taskTable WHERE ROWNUM <= ? " +
-                    " ORDER BY task_id",
+            "SELECT task_id, task_type, description, attempt, process_time, taken FROM $taskTable " +
+                    " ORDER BY task_id LIMIT ? ",
             { rs, i ->
                 AsyncTaskDto(
                     rs.getLong(1), rs.getString(2),
@@ -142,7 +140,7 @@ class OracleAsyncTaskDao @Autowired constructor(
 
     override fun processNow(taskId: Long, expectedAttempt: Int): Int {
         return jdbcTemplate.update(
-            "UPDATE $taskTable SET process_time = SYSTIMESTAMP WHERE task_id = ? and attempt = ?",
+            "UPDATE $taskTable SET process_time = CURRENT_TIMESTAMP WHERE task_id = ? and attempt = ?",
             taskId,
             expectedAttempt
         )

@@ -62,6 +62,9 @@ implementation 'io.github.yakovsirotkin:machamp-spring-boot-starter:0.0.25'
 ```
 
 ## Database table creation
+
+Machamp tested with PostgreSQL version 12.15. 
+
 [machamp-core/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-core/src/main/resources/sql/001-init.sql)
 ```postgresql
 CREATE TABLE async_task
@@ -158,7 +161,7 @@ public class MyAsyncTaskHandler implements AsyncTaskHandler {
 ```kotlin
 import io.github.yakovsirotkin.machamp.AsyncTaskDao
 
-private val asyncTaskDao: AsyncTaskDao, //in bean constructor
+    private val asyncTaskDao: AsyncTaskDao, //in bean constructor
 
         //In code
         asyncTaskDao.createTask(
@@ -204,7 +207,7 @@ In case of `spring.main.lazy-initialization=true` you should initialize bean tha
 ## SQL Server
 
 To use machamp with SQL Server you need to use `machamp-sqlserver-spring-boot-starter` package instead of
-`machamp-spring-boot-starter`.
+`machamp-spring-boot-starter`. Machamp tested with SQL Server version 2017-CU12.
 
 To create database table you need to apply script
 
@@ -227,7 +230,7 @@ CREATE TABLE async_task
 ## Oracle
 
 To use machamp with Oracle you need to use `machamp-oracle-spring-boot-starter` package instead of
-`machamp-spring-boot-starter`. Machamp supports Oracle starting version 12c.
+`machamp-spring-boot-starter`. Machamp tested with Oracle 18.4.0.
 
 To create database table you need to apply script
 
@@ -254,3 +257,25 @@ CREATE SEQUENCE async_task_seq START WITH 1;
 |-------------------------------|------------------|------------------------------------------------------------------------------------|
 | machamp.taskSequence          | `async_task_seq` | Allows to set the name for the sequence for the machamp tasks ids                  |
 
+## MySQL
+
+To use machamp with MySQL you need to use `machamp-mysql-spring-boot-starter` package instead of
+`machamp-spring-boot-starter`. Machamp tested with MySQL version 8.1.0.
+
+To create database table you need to apply script
+
+[machamp-mysql/src/main/resources/sql/001-init.sql](https://github.com/YakovSirotkin/machamp/blob/main/machamp-mysql/src/main/resources/sql/001-init.sql)
+
+```mysql
+CREATE TABLE async_task
+(
+    task_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    task_type VARCHAR(255) NOT NULL,
+    description  TEXT,
+    attempt      INT DEFAULT 0   NOT NULL,
+    priority     INT DEFAULT 100 NOT NULL,
+    process_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created      TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    taken        TIMESTAMP DEFAULT NULL
+);
+```
