@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.github.yakovsirotkin</groupId>
         <artifactId>machamp-parent</artifactId>
-        <version>0.0.25</version>
+        <version>0.0.26</version>
         <relativePath>../machamp-parent</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -208,13 +208,13 @@
         <dependency>
             <groupId>io.github.yakovsirotkin</groupId>
             <artifactId>machamp-spring-boot-starter</artifactId>
-            <version>0.0.25</version>
+            <version>0.0.26</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.yakovsirotkin</groupId>
             <artifactId>machamp-sqlserver</artifactId>
-            <version>0.0.25</version>
+            <version>0.0.26</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
