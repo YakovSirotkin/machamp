@@ -7,7 +7,9 @@
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
   </a>
 </p>
-Async task processing engine for Spring Boot and PostgreSQL
+Queue implementation over database for Spring Boot.
+
+[Comparison with Apache Kafka and RabbitMQ](compare.md)
 
 # Design
 Let's assume that an application needs to email the user, but the SMTP host is unreachable. Throwing an exception and showing it to the user after connection timeout seems bad. Resending immediately will not help. Resending with a delay is better, but if the number of attempts is not limited, we can easily overload the server if the outage continues. Looks like we need to store information
